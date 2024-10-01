@@ -1,4 +1,4 @@
-#include "structure.h"
+#include "engine.h"
 
 int ChessEngine::minimax(int depth, int alpha, int beta, bool isMaximizing)
 {

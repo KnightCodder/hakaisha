@@ -1,0 +1,23 @@
+[Event "Computer chess game"]
+[Site "DESKTOP-K102US7"]
+[Date "2024.09.30"]
+[Round "?"]
+[White "Divyansh"]
+[Black "Hakaisha"]
+[Result "1-0"]
+[BlackElo "2000"]
+[ECO "A40"]
+[Opening "Queen's Pawn"]
+[Time "20:47:47"]
+[Variation "Jadoul"]
+[WhiteElo "2400"]
+[Termination "normal"]
+[PlyCount "39"]
+[WhiteType "human"]
+[BlackType "program"]
+
+1. d4 c6 2. c4 b5 3. e4 bxc4 4. Bxc4 Ba6 5. Bxa6 Qa5+ 6. Bd2 Qxa6 7. Nf3
+Qc4 8. Na3 Qd3 9. Rc1 Qxe4+ 10. Be3 Qd5 11. O-O Qxa2 12. Re1 Qxb2 13. Nc4
+Qa2 14. d5 d6 15. dxc6 Nd7 16. Nxd6+ exd6 17. Bf4+ Kd8 18. Bxd6 Bxd6 19.
+Qxd6 Qa5 20. Qxd7# 1-0
+
