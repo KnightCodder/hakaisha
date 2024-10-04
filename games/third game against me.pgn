@@ -1,0 +1,29 @@
+[Event "Computer chess game"]
+[Site "DESKTOP-K102US7"]
+[Date "2024.10.01"]
+[Round "?"]
+[White "Divyansh"]
+[Black "Hakaisha"]
+[Result "1-0"]
+[BlackElo "2000"]
+[ECO "A40"]
+[Opening "Queen's Pawn"]
+[Time "12:29:53"]
+[Variation "1...c6"]
+[WhiteElo "2400"]
+[Termination "normal"]
+[PlyCount "117"]
+[WhiteType "human"]
+[BlackType "program"]
+
+1. d4 c6 2. d5 c5 3. Nf3 c4 4. e4 c3 5. Nxc3 a6 6. Be3 a5 7. Bb5 b6 8. Na4
+e6 9. d6 Qe7 10. dxe7 f6 11. exf8=Q+ Kxf8 12. Nxb6 Ra7 13. Nxc8 Rb7 14.
+Bxd7 Nxd7 15. Qd6+ Kf7 16. Ng5+ fxg5 17. Bxg5 Ndf6 18. e5 Ne4 19. Qc6 Rb4
+20. Qd7+ Kg6 21. Qxe6+ Kxg5 22. h4+ Kf4 23. g3+ Kf3 24. Qf5+ Kg2 25. Rg1+
+Kxg1 26. O-O-O+ Kg2 27. c3 Nh6 28. Qf4 Nxc3 29. Qxb4 Nxa2+ 30. Kb1 Nxb4 31.
+Nd6 Kxf2 32. e6 Kxg3 33. e7 Kh3 34. e8=Q Rxe8 35. Nxe8 g6 36. Rd4 Kg3 37.
+Nf6 Kh3 38. Nxh7 Kg3 39. Nf8 Kh3 40. Nxg6 Kg3 41. Ne5 Kh3 42. Nc4 Kg3 43.
+Nxa5 Na6 44. b4 Nb8 45. b5 Nf7 46. b6 Nh6 47. Re4 Nd7 48. b7 Kh3 49. Re8
+Kg3 50. b8=Q+ Nxb8 51. Rxb8 Kh3 52. Rh8 Nf7 53. Rh7 Nd8 54. h5 Kg3 55. h6
+Kh3 56. Rh8 Ne6 57. h7 Kg4 58. Rg8+ Kh4 59. h8=Q# 1-0
+

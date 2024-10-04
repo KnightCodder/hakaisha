@@ -91,9 +91,19 @@ public:
         }
     }
 
-    void handleGo(const std::string & /*input*/)
+    void handleGo(const std::string &input)
     {
-        int depth = 4;             // Default depth; modify according to input if needed
+        std::istringstream iss(input);
+        std::string token;
+
+        iss >> token; // Skip "go"
+        iss >> token;
+
+        int depth = 0;
+
+        if (token == "depth")
+            iss >> depth;
+
         engine.startSearch(depth); // Start the search on a separate thread
     }
 };

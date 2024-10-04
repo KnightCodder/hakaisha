@@ -263,6 +263,8 @@ public:
 
     std::vector<Move> generateLegalMoves();
 
+    std::vector<Move> generateTacticalMoves();
+
     void makeMove(const Move &move);
 
     void unmakeMove();
@@ -272,7 +274,7 @@ public:
         return (board[move.from].piece == PAWN && (move.to / 8 == 0 || move.to / 8 == 7));
     }
 
-    int evaluateBoard() const;
+    int evaluateBoard(bool isMaximising = true) const;
 
     void makeMoveFromUCI(const std::string &moveStr);
 };

@@ -1,4 +1,6 @@
 #include "structure.h"
+#include <random>
+#include <algorithm> // For std::shuffle
 
 class ChessEngine
 {
@@ -9,12 +11,25 @@ public:
 
     ChessEngine() : stopSearch(false) {}
 
+    int negamax(int depth, int alpha, int beta, int color);
+
+    int quiescence(int alpha, int beta, bool isMaximizing);
+
     int minimax(int depth, int alpha, int beta, bool isMaximizing);
 
     Move findBestMove(int depth)
     {
         std::vector<Move> moves = board.generateLegalMoves();
+
+        // Random number generator
+        std::random_device rd;
+        std::mt19937 gen(rd());
+
+        // Shuffle the vector
+        std::shuffle(moves.begin(), moves.end(), gen);
+
         Move bestMove = moves[0];
+
         int bestValue = -INF;
 
         for (const Move &move : moves)
@@ -30,8 +45,12 @@ public:
                 bestMove = move;
             }
 
+            // alpha = std::max(alpha, moveValue); // Update alpha for pruning
+
+            // if (alpha >= beta || stopSearch.load())
             if (stopSearch.load())
-            { // Stop search if requested
+            {
+                // Beta cut-off or stop search if requested
                 break;
             }
         }

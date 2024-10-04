@@ -4,7 +4,7 @@ std::array<std::array<std::array<std::vector<int>, 8>, 64>, 7> precompiledPieceV
 
 std::vector<Move> ChessBoard::generateLegalMoves()
 {
-    std::vector<Move> moves,tempMoves;
+    std::vector<Move> moves, tempMoves;
 
     for (int square = 0; square < 64; square++)
     {
@@ -196,6 +196,66 @@ std::vector<Move> ChessBoard::generateLegalMoves()
     }
 
     return moves;
+}
+
+std::vector<Move> ChessBoard::generateTacticalMoves()
+{
+    std::vector<Move> tacticalMoves;
+    // int opponentKingSquare = kingPosition[oppositeColor[colorToMove]];
+
+    for (int square = 0; square < 64; square++)
+    {
+        if (board[square].color != colorToMove)
+            continue;
+
+        // Process all potential moves for the piece at the square
+        for (int dir = 0; dir < 8; dir++)
+        {
+            for (int target : precompiledPieceVision[board[square].piece][square][dir])
+            {
+                if (board[target].color == colorToMove)
+                    break; // Stop if the target square has our own piece
+
+                // Captures (target square is occupied by opponent's piece)
+                if (board[target].color == oppositeColor[colorToMove])
+                {
+                    tacticalMoves.push_back({square, target, EMPTY}); // Capture move
+                    break;                                            // Stop further exploration in this direction after capture
+                }
+
+                // Promotions (if a pawn reaches the back rank)
+                if (board[square].piece == PAWN)
+                {
+                    // White pawn reaches rank 8 or Black pawn reaches rank 1
+                    if ((board[square].color == WHITE && target > 47) || (board[square].color == BLACK && target < 16))
+                    {
+                        tacticalMoves.push_back({square, target, QUEEN});
+                        tacticalMoves.push_back({square, target, ROOK});
+                        tacticalMoves.push_back({square, target, BISHOP});
+                        tacticalMoves.push_back({square, target, KNIGHT});
+                        break; // Stop further exploration after promotion
+                    }
+                }
+
+                // // Check if the move puts the opponent's king in check
+                // makeMove({square, target});
+                // if (checkAt(opponentKingSquare, colorToMove))
+                // {
+                //     tacticalMoves.push_back({square, target, EMPTY}); // Add the check move
+                // }
+                // unmakeMove();
+
+                // If the target square is occupied, stop searching further
+                if (board[target].color != NONE)
+                    break;
+            }
+        }
+    }
+
+    // Filter moves: add castling and en passant if they result in tactical outcomes (if needed)
+    // These can be added based on the same principles, but typically castling is not considered tactical.
+
+    return tacticalMoves;
 }
 
 bool ChessBoard::checkAt(int index, Color forColor)
