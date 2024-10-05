@@ -1,0 +1,6 @@
+to create engine run
+
+``` make engine ```
+
+then you would get hakaisha.exe in the root of the directory use this in any UCI supported GUI like arena.
+
