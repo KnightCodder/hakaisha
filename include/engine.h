@@ -11,11 +11,9 @@ public:
 
     ChessEngine() : stopSearch(false) {}
 
-    int negamax(int depth, int alpha, int beta, int color);
+    int negamax(int depth, int alpha, int beta);
 
-    int quiescence(int alpha, int beta, bool isMaximizing);
-
-    int minimax(int depth, int alpha, int beta, bool isMaximizing);
+    int quiescence(int alpha, int beta, int depth);
 
     Move findBestMove(int depth)
     {
@@ -30,13 +28,15 @@ public:
 
         Move bestMove = moves[0];
 
+        int alpha = -INF;
+        int beta = INF;
         int bestValue = -INF;
 
         for (const Move &move : moves)
         {
             board.makeMove(move);
 
-            int moveValue = minimax(depth - 1, -INF, INF, false);
+            int moveValue = -negamax(depth - 1, -beta, -alpha);
             board.unmakeMove();
 
             if (moveValue > bestValue)
@@ -45,10 +45,10 @@ public:
                 bestMove = move;
             }
 
-            // alpha = std::max(alpha, moveValue); // Update alpha for pruning
+            alpha = std::max(alpha, moveValue); // Update alpha for pruning
 
-            // if (alpha >= beta || stopSearch.load())
-            if (stopSearch.load())
+            if (alpha >= beta || stopSearch.load())
+            // if (stopSearch.load())
             {
                 // Beta cut-off or stop search if requested
                 break;

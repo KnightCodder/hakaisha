@@ -1,6 +1,6 @@
 #include "structure.h"
 
-int ChessBoard::evaluateBoard(bool isMaximising) const
+int ChessBoard::evaluateBoard() const
 {
     if (isThreefoldRepetition())
         return 0;
@@ -12,8 +12,6 @@ int ChessBoard::evaluateBoard(bool isMaximising) const
     {
         score += pieceValues[board[i].piece] * colorValues[board[i].color];
     }
-    score *= colorValues[colorToMove];
 
-    return (isMaximising) ? score : -score;
-    // return score;
+    return score;
 }

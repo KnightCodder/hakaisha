@@ -274,7 +274,7 @@ public:
         return (board[move.from].piece == PAWN && (move.to / 8 == 0 || move.to / 8 == 7));
     }
 
-    int evaluateBoard(bool isMaximising = true) const;
+    int evaluateBoard() const;
 
     void makeMoveFromUCI(const std::string &moveStr);
 };
