@@ -10,7 +10,7 @@ void ChessBoard::makeMove(const Move &move)
     // Handle pawn promotion
     if (isPawnPromotion(move))
     {
-        board[move.to] = move.promotion; // Replace pawn with the promotion piece
+        board[move.to] = {move.promotion.piece, board[move.from].color}; // Replace pawn with the promotion piece
         board[move.from] = {};
         enPassantTarget.push(-1);
         fiftyMoves.push(0);
@@ -119,8 +119,10 @@ void ChessBoard::unmakeMove()
     // Handle pawn promotion
     if (move.promotion != Piece{EMPTY, NONE}) // have to find a way to solve it
     {
+        // printBoard();
         board[move.from] = {PAWN, board[move.to].color}; // Restore the pawn to its original position
         board[move.to] = capturedPiece;                  // Clear the promoted piece
+        // printBoard();
     }
     // Handle en passant
     else if (move.to == enPassantTarget.top() && board[move.to].piece == PieceType::PAWN)

@@ -111,7 +111,7 @@ void ChessBoard::printBoard() const
 
     std::cout << "\n\tenpassent : " << enPassantTarget.top() << std::endl;
     std::cout << "\tcastling (KQkq) : " << castlingRights.top().WKSC << castlingRights.top().WQSC << castlingRights.top().BKSC << castlingRights.top().BQSC << std::endl;
-    std::cout << "\tthree fold repetition : " << isThreefoldRepetition() << std::endl;
+    // std::cout << "\tthree fold repetition : " << isThreefoldRepetition() << std::endl;
     std::cout << "\tturn : " << colorToMove << std::endl;
     std::cout << "\tfifty moves : " << fiftyMoves.top() << '\n'
               << std::endl;

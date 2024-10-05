@@ -46,9 +46,17 @@ int main() {
 
     ChessEngine haki;
 
-    haki.board = ChessBoard("4rbr1/pp1nN3/1qp2n1k/6N1/3P4/3Q4/PPP2PPP/R5K1 w - - 0 22");
+    haki.board = ChessBoard("4nk2/1p3P2/3P2P1/2p2P1P/8/1b1p4/4p1P1/4K3 b - - 0 1");
 
-    Move bestmove = haki.findBestMove(4);
+    std::vector<Move> moves = haki.board.generateLegalMoves();
+
+    Move bestmove = haki.findBestMove(2);
+    haki.board.printBoard();
+
+    for(Move move : moves)
+    {
+        std::cout << "\t" << move.toString() << std::endl;
+    }
 
     printMove(bestmove);
 

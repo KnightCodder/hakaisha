@@ -288,20 +288,20 @@ bool ChessBoard::checkAt(int index, Color forColor)
         }
     }
 
-    std::array<std::vector<int>, 8> pawnVision = precompiledPieceVision[PAWN][index];
+    std::array<std::vector<int>, 8> kingVision = precompiledPieceVision[KING][index];
     // for pawn
     if (forColor == WHITE)
     {
-        if (!pawnVision[1].empty() && board[pawnVision[1].at(0)] == Piece{PAWN, BLACK})
+        if (!kingVision[5].empty() && board[kingVision[5].at(0)] == Piece{PAWN, BLACK})
             return true;
-        if (!pawnVision[2].empty() && board[pawnVision[2].at(0)] == Piece{PAWN, BLACK})
+        if (!kingVision[4].empty() && board[kingVision[4].at(0)] == Piece{PAWN, BLACK})
             return true;
     }
     else if (forColor == BLACK)
     {
-        if (!pawnVision[4].empty() && board[pawnVision[4].at(0)] == Piece{PAWN, WHITE})
+        if (!kingVision[6].empty() && board[kingVision[6].at(0)] == Piece{PAWN, WHITE})
             return true;
-        if (!pawnVision[5].empty() && board[pawnVision[5].at(0)] == Piece{PAWN, WHITE})
+        if (!kingVision[7].empty() && board[kingVision[7].at(0)] == Piece{PAWN, WHITE})
             return true;
     }
 
