@@ -198,7 +198,7 @@ std::vector<Move> ChessBoard::generateLegalMoves()
     return moves;
 }
 
-std::vector<Move> ChessBoard::generateTacticalMoves()
+std::vector<Move> ChessBoard::generateCapturePromotionMoves()
 {
     std::vector<Move> tacticalMoves, tempMoves;
     // int opponentKingSquare = kingPosition[oppositeColor[colorToMove]];
@@ -216,34 +216,108 @@ std::vector<Move> ChessBoard::generateTacticalMoves()
                 if (board[target].color == colorToMove)
                     break; // Stop if the target square has our own piece
 
+                // Promotions (if a pawn reaches the back rank)
+                if (board[square].piece == PAWN)
+                {
+                    // White pawn reaches rank 8 or Black pawn reaches rank 1
+                    if ((board[square].color == WHITE && target > H7 && ((dir == 0 && board[target].color == NONE) || ((dir == 1 || dir == 2) && board[target].color == BLACK))) || (board[square].color == BLACK && target < A2 && ((dir == 3 && board[target].color == NONE) || ((dir == 4 || dir == 5) && board[target].color == WHITE))))
+                    {
+                        tacticalMoves.push_back({square, target, QUEEN});
+                        tacticalMoves.push_back({square, target, ROOK});
+                        tacticalMoves.push_back({square, target, BISHOP});
+                        tacticalMoves.push_back({square, target, KNIGHT});
+                        break; // Stop further exploration after promotion
+                    }
+
+                    if ((board[square].color == WHITE && ((dir == 0 && board[target].color != NONE) || ((dir == 1 || dir == 2) && board[target].color == NONE))) || (board[square].color == BLACK && ((dir == 3 && board[target].color != NONE) || ((dir == 4 || dir == 5) && board[target].color == NONE))))
+                        break;
+                }
+
                 // Captures (target square is occupied by opponent's piece)
                 if (board[target].color == oppositeColor[colorToMove])
                 {
                     tempMoves.push_back({square, target, EMPTY}); // Capture move
-                    break;                                            // Stop further exploration in this direction after capture
+                    break;                                        // Stop further exploration in this direction after capture
                 }
 
+                // If the target square is occupied, stop searching further
+                if (board[target].color != NONE)
+                    break;
+            }
+        }
+    }
+
+    // remove illegal moves
+    for (Move move : tempMoves)
+    {
+        makeMove(move);
+
+        if (!checkAt(kingPosition[oppositeColor[colorToMove]], oppositeColor[colorToMove]))
+        {
+            tacticalMoves.push_back(move);
+        }
+
+        unmakeMove();
+    }
+
+    return tacticalMoves;
+}
+
+std::vector<Move> ChessBoard::generateCheckMoves()
+{
+    std::vector<Move> tacticalMoves, tempMoves;
+    int opponentKingSquare = kingPosition[oppositeColor[colorToMove]];
+
+    for (int square = 0; square < 64; square++)
+    {
+        if (board[square].color != colorToMove)
+            continue;
+
+        // Process all potential moves for the piece at the square
+        for (int dir = 0; dir < 8; dir++)
+        {
+            for (int target : precompiledPieceVision[board[square].piece][square][dir])
+            {
+                if (board[target].color == colorToMove)
+                    break; // Stop if the target square has our own piece
+
                 // Promotions (if a pawn reaches the back rank)
-                // if (board[square].piece == PAWN)
-                // {
-                //     // White pawn reaches rank 8 or Black pawn reaches rank 1
-                //     if ((board[square].color == WHITE && target > 47) || (board[square].color == BLACK && target < 16))
-                //     {
-                //         tacticalMoves.push_back({square, target, QUEEN});
-                //         tacticalMoves.push_back({square, target, ROOK});
-                //         tacticalMoves.push_back({square, target, BISHOP});
-                //         tacticalMoves.push_back({square, target, KNIGHT});
-                //         break; // Stop further exploration after promotion
-                //     }
-                // }
+                if (board[square].piece == PAWN)
+                {
+                    // White pawn reaches rank 8 or Black pawn reaches rank 1
+                    if ((board[square].color == WHITE && target > H7 && ((dir == 0 && board[target].color == NONE) || ((dir == 1 || dir == 2) && board[target].color == BLACK))) || (board[square].color == BLACK && target < A2 && ((dir == 3 && board[target].color == NONE) || ((dir == 4 || dir == 5) && board[target].color == WHITE))))
+                    {
+                        makeMove({square, target, QUEEN});
+                        if (checkAt(opponentKingSquare, colorToMove))
+                            tacticalMoves.push_back({square, target, QUEEN});
+                        unmakeMove();
+                        makeMove({square, target, ROOK});
+                        if (checkAt(opponentKingSquare, colorToMove))
+                            tacticalMoves.push_back({square, target, ROOK});
+                        unmakeMove();
+                        makeMove({square, target, BISHOP});
+                        if (checkAt(opponentKingSquare, colorToMove))
+                            tacticalMoves.push_back({square, target, BISHOP});
+                        unmakeMove();
+                        makeMove({square, target, KNIGHT});
+                        if (checkAt(opponentKingSquare, colorToMove))
+                            tacticalMoves.push_back({square, target, KNIGHT});
+                        unmakeMove();
+
+                        break; // Stop further exploration after promotion
+                    }
+
+                    if ((board[square].color == WHITE && ((dir == 0 && board[target].color != NONE) || ((dir == 1 || dir == 2) && board[target].color == NONE))) || (board[square].color == BLACK && ((dir == 3 && board[target].color != NONE) || ((dir == 4 || dir == 5) && board[target].color == NONE))))
+                        break;
+                }
 
                 // // Check if the move puts the opponent's king in check
-                // makeMove({square, target});
-                // if (checkAt(opponentKingSquare, colorToMove))
-                // {
-                //     tacticalMoves.push_back({square, target, EMPTY}); // Add the check move
-                // }
-                // unmakeMove();
+                makeMove({square, target});
+                if (checkAt(opponentKingSquare, colorToMove))
+                {
+                    tacticalMoves.push_back({square, target, EMPTY}); // Add the check move
+                }
+                unmakeMove();
 
                 // If the target square is occupied, stop searching further
                 if (board[target].color != NONE)

@@ -11,9 +11,11 @@ public:
 
     ChessEngine() : stopSearch(false) {}
 
-    int negamax(int depth, int alpha, int beta);
+    double negamax(int depth, double alpha, double beta);
 
-    int quiescence(int alpha, int beta, int depth);
+    double quiescenceCaptures(double alpha, double beta, int depth);
+
+    double quiescenceChecks(double alpha, double beta, int depth);
 
     Move findBestMove(int depth)
     {

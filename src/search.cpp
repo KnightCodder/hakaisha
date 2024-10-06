@@ -1,8 +1,8 @@
 #include "engine.h"
 
-int ChessEngine::quiescence(int alpha, int beta, int depth)
+double ChessEngine::quiescenceCaptures(double alpha, double beta, int depth)
 {
-    int bestValue = board.evaluateBoard() * colorValues[board.colorToMove];
+    double bestValue = board.evaluateBoard() * colorValues[board.colorToMove];
 
     if (depth <= 0 || stopSearch.load())
         return bestValue;
@@ -12,12 +12,12 @@ int ChessEngine::quiescence(int alpha, int beta, int depth)
     if (alpha >= beta)
         return bestValue;
 
-    std::vector<Move> captureMoves = board.generateTacticalMoves();
+    std::vector<Move> captureMoves = board.generateCapturePromotionMoves();
 
     for (const Move &move : captureMoves)
     {
         board.makeMove(move);
-        int eval = -quiescence(-beta, -alpha, depth - 1);
+        double eval = -quiescenceCaptures(-beta, -alpha, depth - 1);
         board.unmakeMove();
 
         bestValue = std::max(eval, bestValue);
@@ -25,18 +25,51 @@ int ChessEngine::quiescence(int alpha, int beta, int depth)
 
         if (alpha >= beta)
         {
-            break;;
+            break;
         }
     }
 
     return bestValue;
 }
 
-int ChessEngine::negamax(int depth, int alpha, int beta)
+double ChessEngine::quiescenceChecks(double alpha, double beta, int depth)
+{
+    double bestValue = board.evaluateBoard() * colorValues[board.colorToMove];
+
+    if (depth <= 0 || stopSearch.load())
+        return bestValue;
+
+    alpha = std::max(alpha, bestValue);
+
+    if (alpha >= beta)
+        return bestValue;
+
+    std::vector<Move> checkMoves = board.generateCheckMoves();
+
+    for (const Move &move : checkMoves)
+    {
+        board.makeMove(move);
+        double eval = -quiescenceChecks(-beta, -alpha, depth - 1);
+        board.unmakeMove();
+
+        bestValue = std::max(eval, bestValue);
+        alpha = std::max(alpha, bestValue);
+
+        if (alpha >= beta)
+        {
+            break;
+        }
+    }
+
+    return bestValue;
+}
+
+double ChessEngine::negamax(int depth, double alpha, double beta)
 {
     if (depth == 0 || stopSearch.load())
     {
-        return quiescence(alpha, beta, 0);
+        // return std::max(quiescenceChecks(alpha, beta, 1), quiescenceCaptures(alpha, beta, 1));
+        return quiescenceCaptures(alpha, beta, 1);
         // return board.evaluateBoard() * colorValues[board.colorToMove];
     }
 
@@ -56,12 +89,12 @@ int ChessEngine::negamax(int depth, int alpha, int beta)
         }
     }
 
-    int maxEval = -INF;
+    double maxEval = -INF;
 
     for (const Move &move : moves)
     {
         board.makeMove(move);
-        int eval = -negamax(depth - 1, -beta, -alpha);
+        double eval = -negamax(depth - 1, -beta, -alpha);
         board.unmakeMove();
 
         maxEval = std::max(maxEval, eval);

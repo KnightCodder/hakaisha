@@ -3,6 +3,7 @@
 
 void initializeZobrist();
 void compilingPieceVision();
+void initializeMLmodel();
 
 void printMove(const Move& move) {
     char fromFile = 'a' + (move.from % 8);
@@ -43,14 +44,16 @@ void testChessBoard() {
 int main() {
     initializeZobrist(); // Ensure Zobrist hashing is initialized
     compilingPieceVision();
+    initializeMLmodel();
 
     ChessEngine haki;
 
-    haki.board = ChessBoard("4nk2/1p3P2/3P2P1/2p2P1P/8/1b1p4/4p1P1/4K3 b - - 0 1");
+    haki.board = ChessBoard("2r2k2/1P6/4P3/8/8/2p1B3/7p/3K4 b - - 0 1");
 
-    std::vector<Move> moves = haki.board.generateLegalMoves();
+    std::vector<Move> moves = haki.board.generateCheckMoves();
 
-    Move bestmove = haki.findBestMove(2);
+    Move bestmove = haki.findBestMove(4);
+
     haki.board.printBoard();
 
     for(Move move : moves)
